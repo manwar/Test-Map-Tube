@@ -1,4 +1,7 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.02  Fri Feb 20 16:25:00 2015
+      - Fixed the typo in the README file.
+
 0.01  Fri Feb 20 16:20:00 2015
       - Module created.

@@ -1,0 +1,11 @@
+Changes
+Makefile.PL
+LICENSE
+MANIFEST
+MANIFEST.SKIP
+README
+lib/Test/Map/Tube.pm
+t/pod.t
+t/manifest.t
+t/meta-json.t
+t/meta-yml.t

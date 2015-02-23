@@ -20,14 +20,14 @@ WriteMakefile(
         'Test::More' => 0,
     },
     PREREQ_PM => {
-        'Map::Tube'     => '2.86',
+        'Map::Tube'     => '2.87',
         'Test::Builder' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Test-Map-Tube-*' },
     (eval { ExtUtils::MakeMaker->VERSION(6.46) } ? (META_MERGE => {
         'meta-spec' => { version => 2 },
-        provides    => { 'Test::Map::Tube' => { file => 'lib/Test/Map/Tube.pm', version => '0.02' } },
+        provides    => { 'Test::Map::Tube' => { file => 'lib/Test/Map/Tube.pm', version => '0.03' } },
         resources   => {
             repository => {
                 type => 'git',

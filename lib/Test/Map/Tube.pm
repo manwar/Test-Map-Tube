@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.02';
+$Test::Map::Tube::VERSION   = '0.03';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
@@ -35,7 +35,7 @@ Below is the sample code from L<Map::Tube::London> as an example:
     use Map::Tube::London;
 
     eval "use Test::Map::Tube";
-    plan skip_all => "Skipping, required Test::Map::Tube" if $@;
+    plan skip_all => "Test::Map::Tube required" if $@;
 
     ok_map(Map::Tube::London->new);
 

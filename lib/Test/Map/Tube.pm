@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.03';
+$Test::Map::Tube::VERSION   = '0.04';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
@@ -60,8 +60,8 @@ sub import {
 
 =head2 ok_map($map_object, $message)
 
-It expects an object of package that has take the role of L<Map::Tube>.Optionally
-a C<$message> can also be passed in.
+It expects an object of a package that has taken the role of L<Map::Tube>.You can
+optionally pass C<$message>.
 
 =cut
 

@@ -5,6 +5,7 @@ MANIFEST
 MANIFEST.SKIP
 README
 lib/Test/Map/Tube.pm
+t/Sample.pm
 t/sample.xml
 t/pod.t
 t/map.t

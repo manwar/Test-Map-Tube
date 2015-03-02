@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.06  Mon Mar 02 11:00:00 2015
+      - Upadted unit test map.t and moved package Sample to its own file,
+        as some CPAN Testers were unhappy about it.
+
 0.05  Sun Mar 01 10:55:00 2015
       - Added unit test for method ok_map().
 

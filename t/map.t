@@ -1,18 +1,8 @@
-#!perl
+#!/usr/bin/perl
 
-package Sample;
-
-use strict;use warnings;
-use Moo;
-use namespace::clean;
-
-has xml => (is => 'ro', default => sub { return File::Spec->catfile('t', 'sample.xml') });
-with 'Map::Tube';
-
-package main;
-
-use strict;use warnings;
-use Test::More;
+use 5.006;
+use strict; use warnings;
+use lib 't/';
 use Sample;
 use Test::Map::Tube;
 

@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.06';
+$Test::Map::Tube::VERSION   = '0.07';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,12 +9,13 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
 use strict; use warnings;
 use 5.006;
+use Carp;
 use Test::Builder;
 
 my $TEST      = Test::Builder->new;
@@ -82,7 +83,9 @@ sub _validate {
     return 0 unless (defined $object && $object->does('Map::Tube'));
 
     eval { $object->_validate_map_data; };
-    ($@)?(return 0):(return 1);
+    return 1 unless ($@);
+
+    carp($@) and return 0;
 }
 
 =head1 BUGS

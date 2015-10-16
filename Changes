@@ -1,6 +1,12 @@
 Revision history for Perl extension Test::Map::Tube.
 
-0.08 Sat Sep 26 19:40:00 2015
+0.09  Fri Oct 16 10:30:00 2015
+      - Upgraded to use Map::Tube v3.06.
+      - Added new method ok_map_functions() to test standard functions of Map::Tube.
+      - Added test script t/ok_map_functions.t
+      - Renamed test script  t/map.t -> t/ok_map.t
+
+0.08  Sat Sep 26 19:40:00 2015
       - Upgraded to use Map::Tube v3.01.
 
 0.07  Tue Mar 10 13:00:00 2015

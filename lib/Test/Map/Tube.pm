@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.08';
+$Test::Map::Tube::VERSION   = '0.09';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,13 +9,14 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
 use strict; use warnings;
 use 5.006;
 use Carp;
+use XML::Twig;
 use Test::Builder;
 
 my $TEST      = Test::Builder->new;
@@ -25,20 +26,44 @@ my $PLAN      = 0;
 =head1 DESCRIPTION
 
 It's main responsibilty is to  validate the map data (xml) as used by the package
-that takes the role of L<Map::Tube>.
+that takes the role of L<Map::Tube>.You can also unit test map functions as well.
 
 =head1 SYNOPSIS
 
-Below is the sample code from L<Map::Tube::London> as an example:
+=head2 Validate map data (xml) ONLY.
 
     use strict; use warnings;
     use Test::More;
-    use Map::Tube::London;
 
     eval "use Test::Map::Tube";
     plan skip_all => "Test::Map::Tube required" if $@;
 
+    use Map::Tube::London;
     ok_map(Map::Tube::London->new);
+
+=head2 Validate map functions ONLY.
+
+    use strict; use warnings;
+    use Test::More;
+
+    eval "use Test::Map::Tube";
+    plan skip_all => "Test::Map::Tube required" if $@;
+
+    use Map::Tube::London;
+    ok_map_functions(Map::Tube::London->new);
+
+=head2 Validate map data and functions BOTH.
+
+    use strict; use warnings;
+    use Test::More;
+
+    eval "use Test::Map::Tube tests => 2";
+    plan skip_all => "Test::Map::Tube required" if $@;
+
+    use Map::Tube::London;
+    my $map = Map::Tube::London->new;
+    ok_map($map);
+    ok_map_functions($map);
 
 =cut
 
@@ -46,7 +71,7 @@ sub import {
     my ($self, %plan) = @_;
     my $caller = caller;
 
-    foreach my $function (qw(ok_map)) {
+    foreach my $function (qw(ok_map ok_map_functions)) {
         no strict 'refs';
         *{$caller."::".$function} = \&$function;
     }
@@ -61,8 +86,8 @@ sub import {
 
 =head2 ok_map($map_object, $message)
 
-It expects an object of a package that has taken the role of L<Map::Tube>.You can
-optionally pass C<$message>.
+Validates the map data (xml).It expects an object of a package that has taken the
+role of L<Map::Tube>. You can optionally pass C<$message>.
 
 =cut
 
@@ -70,14 +95,28 @@ sub ok_map ($;$) {
     my ($object, $message) = @_;
 
     $TEST->plan(tests => 1) unless $PLAN;
-    $TEST->is_num(_validate($object), $TEST_BOOL, $message);
+    $TEST->is_num(_ok_map($object), $TEST_BOOL, $message);
+}
+
+=head2 ok_map_functions($map_object, $message)
+
+Validated the map functions. It expects an object of a package that has taken the
+role of L<Map::Tube>. You can optionally pass C<$message>.
+
+=cut
+
+sub ok_map_functions ($;$) {
+    my ($object, $message) = @_;
+
+    $TEST->plan(tests => 1) unless $PLAN;
+    $TEST->is_num(_ok_map_functions($object), $TEST_BOOL, $message);
 }
 
 #
 #
 # PRIVATE METHODS
 
-sub _validate {
+sub _ok_map {
     my ($object) = @_;
 
     return 0 unless (defined $object && $object->does('Map::Tube'));
@@ -86,6 +125,82 @@ sub _validate {
     return 1 unless ($@);
 
     carp($@) and return 0;
+}
+
+sub _ok_map_functions {
+    my ($object) = @_;
+
+    return 0 unless (defined $object && $object->does('Map::Tube'));
+
+    my $actual = $object->_xml_data;
+
+    # get_shortest_route()
+    eval { $object->get_shortest_route };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_shortest_route('Foo') };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_shortest_route('Foo', 'Bar') };
+    ($@) or (carp($@) and return 0);
+    my $from_station = $actual->{stations}->{station}->[0]->{name};
+    my $to_station   = $actual->{stations}->{station}->[1]->{name};
+    eval { $object->get_shortest_route($from_station, 'Bar') };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_shortest_route('Foo', $to_station) };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_shortest_route($from_station, $to_station) };
+    ($@) and carp($@) and return 0;
+
+    # get_name()
+    ($object->name eq $actual->{name}) or (carp($@) and return 0);
+
+    # get_lines()
+    my $lines_count = scalar(@{$actual->{lines}->{line}});
+    (scalar(@{$object->get_lines}) == $lines_count) or (carp($@) and return 0);
+
+    # get_stations()
+    eval { $object->get_stations };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_stations('X') };
+    ($@) or (carp($@) and return 0);
+    my $line_name = $actual->{lines}->{line}->[0]->{name};
+    (scalar(@{$object->get_stations($line_name)}) > 0) or (carp($@) and return 0);
+
+    # get_line_by_id()
+    eval { $object->get_line_by_id };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_line_by_id('L') };
+    ($@) or (carp($@) and return 0);
+    my $line_id = $actual->{lines}->{line}->[0]->{id};
+    eval { $object->get_line_by_id($line_id) };
+    ($@) and (carp($@) and return 0);
+
+    # get_line_by_name() - handle in case when Map::Tube::Plugin::FuzzyNames is installed.
+    eval { $object->get_line_by_name($line_name) };
+    ($@) and (carp($@) and return 0);
+    eval { my $l = $object->get_line_by_name('L'); croak() unless defined $l };
+    ($@) or (carp($@) and return 0);
+    eval { my $l = $object->get_line_by_name; croak() unless defined $l; };
+    ($@) or (carp($@) and return 0);
+
+    # get_node_by_id()
+    eval { $object->get_node_by_id };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_node_by_id('X') };
+    ($@) or (carp($@) and return 0);
+    my $station_id = $actual->{stations}->{station}->[0]->{id};
+    eval { $object->get_node_by_id($station_id) };
+    ($@) and (carp($@) and return 0);
+
+    # get_node_by_nane()
+    eval { $object->get_node_by_name };
+    ($@) or (carp($@) and return 0);
+    eval { $object->get_node_by_name('X') };
+    ($@) or (carp($@) and return 0);
+    my $station_name = $actual->{stations}->{station}->[0]->{name};
+    eval { $object->get_node_by_name($station_name) };
+    ($@) and (carp($@) and return 0);
+
+    return 1;
 }
 
 =head1 BUGS

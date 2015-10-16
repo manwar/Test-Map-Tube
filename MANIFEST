@@ -8,7 +8,8 @@ lib/Test/Map/Tube.pm
 t/Sample.pm
 t/sample.xml
 t/pod.t
-t/map.t
+t/ok_map.t
+t/ok_map_functions.t
 t/manifest.t
 t/meta-json.t
 t/meta-yml.t

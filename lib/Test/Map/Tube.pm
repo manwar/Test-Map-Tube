@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.09';
+$Test::Map::Tube::VERSION   = '0.10';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.09
+Version 0.10
 
 =cut
 
@@ -46,8 +46,9 @@ that takes the role of L<Map::Tube>.You can also unit test map functions as well
     use strict; use warnings;
     use Test::More;
 
-    eval "use Test::Map::Tube";
-    plan skip_all => "Test::Map::Tube required" if $@;
+    my $min_ver = 0.09;
+    eval "use Test::Map::Tube $min_ver";
+    plan skip_all => "Test::Map::Tube $min_ver required" if $@;
 
     use Map::Tube::London;
     ok_map_functions(Map::Tube::London->new);
@@ -57,8 +58,9 @@ that takes the role of L<Map::Tube>.You can also unit test map functions as well
     use strict; use warnings;
     use Test::More;
 
-    eval "use Test::Map::Tube tests => 2";
-    plan skip_all => "Test::Map::Tube required" if $@;
+    my $min_ver = 0.09;
+    eval "use Test::Map::Tube $min_ver tests => 2";
+    plan skip_all => "Test::Map::Tube $min_ver required" if $@;
 
     use Map::Tube::London;
     my $map = Map::Tube::London->new;

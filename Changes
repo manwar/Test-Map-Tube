@@ -1,5 +1,11 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.10  Sat Oct 17 10:40:00 2015
+      - Updated code in the pod section 'SYNOPSIS'.
+      - Added unit test t/00-load.t
+      - Updated MANIFEST file.
+      - Removed minimum version check for Test::More from Makefile.PL script.
+
 0.09  Fri Oct 16 10:30:00 2015
       - Upgraded to use Map::Tube v3.06.
       - Added new method ok_map_functions() to test standard functions of Map::Tube.

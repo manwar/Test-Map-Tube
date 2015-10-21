@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.10';
+$Test::Map::Tube::VERSION   = '0.11';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
@@ -176,7 +176,7 @@ sub _ok_map_functions {
     eval { $object->get_line_by_id($line_id) };
     ($@) and (carp($@) and return 0);
 
-    # get_line_by_name() - handle in case when Map::Tube::Plugin::FuzzyNames is installed.
+    # get_line_by_name() - handle in case Map::Tube::Plugin::FuzzyNames is installed.
     eval { $object->get_line_by_name($line_name) };
     ($@) and (carp($@) and return 0);
     eval { my $l = $object->get_line_by_name('L'); croak() unless defined $l };
@@ -193,7 +193,7 @@ sub _ok_map_functions {
     eval { $object->get_node_by_id($station_id) };
     ($@) and (carp($@) and return 0);
 
-    # get_node_by_nane()
+    # get_node_by_name()
     eval { $object->get_node_by_name };
     ($@) or (carp($@) and return 0);
     eval { $object->get_node_by_name('X') };

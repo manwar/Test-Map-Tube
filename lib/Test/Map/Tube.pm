@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.11';
+$Test::Map::Tube::VERSION   = '0.12';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.11
+Version 0.12
 
 =cut
 
@@ -138,17 +138,17 @@ sub _ok_map_functions {
 
     # get_shortest_route()
     eval { $object->get_shortest_route };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_shortest_route() with no param') and return 0);
     eval { $object->get_shortest_route('Foo') };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_shortest_route() with one param') and return 0);
     eval { $object->get_shortest_route('Foo', 'Bar') };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_shortest_route() with two invalid params') and return 0);
     my $from_station = $actual->{stations}->{station}->[0]->{name};
     my $to_station   = $actual->{stations}->{station}->[1]->{name};
     eval { $object->get_shortest_route($from_station, 'Bar') };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_shortest_route() with invalid to station') and return 0);
     eval { $object->get_shortest_route('Foo', $to_station) };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_shortest_route() with invalid from station') and return 0);
     eval { $object->get_shortest_route($from_station, $to_station) };
     ($@) and carp($@) and return 0;
 
@@ -161,17 +161,17 @@ sub _ok_map_functions {
 
     # get_stations()
     eval { $object->get_stations };
-    ($@) or (carp($@) and return 0);
-    eval { $object->get_stations('X') };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_stations() with no param') and return 0);
+    eval { $object->get_stations('Not-A-Valid-Line-Name') };
+    ($@) or (carp('Failed get_stations() with invalid line name') and return 0);
     my $line_name = $actual->{lines}->{line}->[0]->{name};
     (scalar(@{$object->get_stations($line_name)}) > 0) or (carp($@) and return 0);
 
     # get_line_by_id()
     eval { $object->get_line_by_id };
-    ($@) or (carp($@) and return 0);
-    eval { $object->get_line_by_id('L') };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_line_by_id() with no param') and return 0);
+    eval { $object->get_line_by_id('Not-A-Valid-Line-ID') };
+    ($@) or (carp('Failed get_line_by_id() with invalid id') and return 0);
     my $line_id = $actual->{lines}->{line}->[0]->{id};
     eval { $object->get_line_by_id($line_id) };
     ($@) and (carp($@) and return 0);
@@ -179,25 +179,25 @@ sub _ok_map_functions {
     # get_line_by_name() - handle in case Map::Tube::Plugin::FuzzyNames is installed.
     eval { $object->get_line_by_name($line_name) };
     ($@) and (carp($@) and return 0);
-    eval { my $l = $object->get_line_by_name('L'); croak() unless defined $l };
-    ($@) or (carp($@) and return 0);
+    eval { my $l = $object->get_line_by_name('Not-A-Valid-Line-Name'); croak() unless defined $l };
+    ($@) or (carp('Failed get_line_by_name() with invalid line name') and return 0);
     eval { my $l = $object->get_line_by_name; croak() unless defined $l; };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_line_by_name() with no param') and return 0);
 
     # get_node_by_id()
     eval { $object->get_node_by_id };
-    ($@) or (carp($@) and return 0);
-    eval { $object->get_node_by_id('X') };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_node_by_id() with no param') and return 0);
+    eval { $object->get_node_by_id('Not-A-Valid-Node-ID') };
+    ($@) or (carp('Failed get_node_by_id() with invalid node id') and return 0);
     my $station_id = $actual->{stations}->{station}->[0]->{id};
     eval { $object->get_node_by_id($station_id) };
     ($@) and (carp($@) and return 0);
 
     # get_node_by_name()
     eval { $object->get_node_by_name };
-    ($@) or (carp($@) and return 0);
-    eval { $object->get_node_by_name('X') };
-    ($@) or (carp($@) and return 0);
+    ($@) or (carp('Failed get_node_by_name() with no param') and return 0);
+    eval { $object->get_node_by_name('Not-A-Valid-Node-Name') };
+    ($@) or (carp('Failed get_node_by_name() with invalid node name') and return 0);
     my $station_name = $actual->{stations}->{station}->[0]->{name};
     eval { $object->get_node_by_name($station_name) };
     ($@) and (carp($@) and return 0);

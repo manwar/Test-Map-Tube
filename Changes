@@ -1,5 +1,8 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.12  Thu Oct 22 11:15:00 2015
+      - Added relevant error message to the test cases.
+
 0.11  Wed Oct 21 11:30:00 2015
       - Upgraded to use Map::Tube v3.09.
       - Fixed minor typo in the pod document.

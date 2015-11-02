@@ -1,5 +1,8 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.14  Mon Nov 02 11:10:00 2015
+      - Updated method ok_map_functions() to return reasonable error message on failure.
+
 0.13  Sun Nov 01 08:20:00 2015
       - Added unit test for Map::Tue::Line::add_station().
       - Upgraded to use Map::Tube v3.12.

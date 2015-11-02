@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.13';
+$Test::Map::Tube::VERSION   = '0.14';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.13
+Version 0.14
 
 =cut
 
@@ -153,11 +153,13 @@ sub _ok_map_functions {
     ($@) and carp($@) and return 0;
 
     # get_name()
-    ($object->name eq $actual->{name}) or (carp($@) and return 0);
+    ($object->name eq $actual->{name})
+        or (carp('name() returns incorrect map name') and return 0);
 
     # get_lines()
     my $lines_count = scalar(@{$actual->{lines}->{line}});
-    (scalar(@{$object->get_lines}) == $lines_count) or (carp($@) and return 0);
+    (scalar(@{$object->get_lines}) == $lines_count)
+        or (carp('get_lines() returns incorrect line entries') and return 0);
 
     # get_stations()
     eval { $object->get_stations };
@@ -165,7 +167,8 @@ sub _ok_map_functions {
     eval { $object->get_stations('Not-A-Valid-Line-Name') };
     ($@) or (carp('get_stations() with invalid line name') and return 0);
     my $line_name = $actual->{lines}->{line}->[0]->{name};
-    (scalar(@{$object->get_stations($line_name)}) > 0) or (carp($@) and return 0);
+    (scalar(@{$object->get_stations($line_name)}) > 0)
+        or (carp('get_stations() returns incorrect station entries') and return 0);
 
     # get_line_by_id()
     eval { $object->get_line_by_id };

@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.14';
+$Test::Map::Tube::VERSION   = '0.15';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.14
+Version 0.15
 
 =cut
 
@@ -18,6 +18,8 @@ use 5.006;
 use Carp;
 use XML::Twig;
 use Test::Builder;
+use Data::Compare;
+use Map::Tube::Route;
 
 my $TEST      = Test::Builder->new;
 my $TEST_BOOL = 1;
@@ -73,7 +75,7 @@ sub import {
     my ($self, %plan) = @_;
     my $caller = caller;
 
-    foreach my $function (qw(ok_map ok_map_functions)) {
+    foreach my $function (qw(ok_map ok_map_routes ok_map_functions)) {
         no strict 'refs';
         *{$caller."::".$function} = \&$function;
     }
@@ -102,7 +104,7 @@ sub ok_map ($;$) {
 
 =head2 ok_map_functions($map_object, $message)
 
-Validated the map functions. It expects an object of a package that has taken the
+Validates the map functions. It expects an object of a package that has taken the
 role of L<Map::Tube>. You can optionally pass C<$message>.
 
 =cut
@@ -112,6 +114,27 @@ sub ok_map_functions ($;$) {
 
     $TEST->plan(tests => 1) unless $PLAN;
     $TEST->is_num(_ok_map_functions($object), $TEST_BOOL, $message);
+}
+
+=head2 ok_map_routes($map_object, \@routes, $message)
+
+Validates the given routes. It expects an  object of a package that has taken the
+role of L<Map::Tube> and array ref of list of route details in the format below:
+
+    my @routes = qw(
+        "Route 1|A1|A3|A1,A2,A3",
+        "Route 2|A1|B1|A1,A2,B1",
+    );
+
+You can optionally pass C<$message>.
+
+=cut
+
+sub ok_map_routes($$;$) {
+    my ($object, $routes, $message) = @_;
+
+    $TEST->plan(tests => 1) unless $PLAN;
+    $TEST->is_num(_ok_map_routes($object, $routes), $TEST_BOOL, $message);
 }
 
 #
@@ -216,6 +239,40 @@ sub _ok_map_functions {
     return 1;
 }
 
+sub _ok_map_routes {
+    my ($object, $routes) = @_;
+
+    return 0 unless (defined $object && $object->does('Map::Tube'));
+
+    foreach (@$routes) {
+        chomp;
+        next if /^\#/;
+        next if /^\s+$/;
+
+        my ($description, $from, $to, $route) = split /\|/;
+        my $got = $object->get_shortest_route($from, $to);
+        my $expected = _expected_route($object, $route);
+        carp("Failed: $description") unless Compare($got, $expected);
+    }
+
+    return 1;
+}
+
+sub _expected_route {
+    my ($object, $route) = @_;
+
+    my $nodes   = [];
+    foreach my $name (split /\,/,$route) {
+        push @$nodes, $object->get_node_by_name($name);
+    }
+
+    return Map::Tube::Route->new(
+       { from  => $nodes->[0],
+         to    => $nodes->[-1],
+         nodes => $nodes
+       });
+}
+
 =head1 BUGS
 
 None that I am aware of.Of course, if you find a bug, let me know, and I would do
@@ -275,7 +332,7 @@ L<http://search.cpan.org/dist/Test-Map-Tube/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (C) 2015 Mohammad S Anwar.
+Copyright (C) 2015 - 2016 Mohammad S Anwar.
 
 This  program  is  free software; you can redistribute it  and/or modify it under
 the  terms  of the the Artistic License (2.0). You may  obtain a copy of the full

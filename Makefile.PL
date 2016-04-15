@@ -11,7 +11,6 @@ WriteMakefile(
     VERSION_FROM       => 'lib/Test/Map/Tube.pm',
     ABSTRACT_FROM      => 'lib/Test/Map/Tube.pm',
     LICENSE            => 'artistic_2',
-    PL_FILES           => {},
     MIN_PERL_VERSION   => 5.006,
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => 0,
@@ -22,13 +21,14 @@ WriteMakefile(
     PREREQ_PM => {
         'XML::Twig'     => '3.48',
         'Map::Tube'     => '3.12',
+        'Data::Compare' => '1.25',
         'Test::Builder' => '1.001014',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Test-Map-Tube-*' },
     (eval { ExtUtils::MakeMaker->VERSION(6.46) } ? (META_MERGE => {
         'meta-spec' => { version => 2 },
-        provides    => { 'Test::Map::Tube' => { file => 'lib/Test/Map/Tube.pm', version => '0.14' } },
+        provides    => { 'Test::Map::Tube' => { file => 'lib/Test/Map/Tube.pm', version => '0.15' } },
         resources   => {
             repository => {
                 type => 'git',

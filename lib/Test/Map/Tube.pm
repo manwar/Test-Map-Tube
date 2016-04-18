@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.15';
+$Test::Map::Tube::VERSION   = '0.16';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.15
+Version 0.16
 
 =cut
 
@@ -69,6 +69,26 @@ that takes the role of L<Map::Tube>.You can also unit test map functions as well
     ok_map($map);
     ok_map_functions($map);
 
+=head2 Validate map data, functions and routes.
+
+    use strict; use warnings;
+    use Test::More;
+
+    my $min_ver = 0.15;
+    eval "use Test::Map::Tube $min_ver tests => 3";
+    plan skip_all => "Test::Map::Tube $min_ver required" if $@;
+
+    use Map::Tube::London;
+    my $map = Map::Tube::London->new;
+    ok_map($map);
+    ok_map_functions($map);
+
+    my @routes = (
+        "Route 1|Tower Gateway|Aldgate|Tower Gateway,Tower Hill,Aldgate",
+        "Route 2|Liverpool Street|Monument|Liverpool Street,Bank,Monument",
+    );
+    ok_map_routes($map, \@routes);
+
 =cut
 
 sub import {
@@ -105,7 +125,8 @@ sub ok_map ($;$) {
 =head2 ok_map_functions($map_object, $message)
 
 Validates the map functions. It expects an object of a package that has taken the
-role of L<Map::Tube>. You can optionally pass C<$message>.
+role of L<Map::Tube>. You can  optionally  pass C<$message>. For this method, you
+would require C<Test::Map::Tube> v0.09 or above.
 
 =cut
 
@@ -121,12 +142,13 @@ sub ok_map_functions ($;$) {
 Validates the given routes. It expects an  object of a package that has taken the
 role of L<Map::Tube> and array ref of list of route details in the format below:
 
-    my @routes = qw(
+    my @routes = (
         "Route 1|A1|A3|A1,A2,A3",
         "Route 2|A1|B1|A1,A2,B1",
     );
 
-You can optionally pass C<$message>.
+You can optionally pass C<$message>. For this method, you would require C<Test::Map::Tube>
+v0.15 or above.
 
 =cut
 

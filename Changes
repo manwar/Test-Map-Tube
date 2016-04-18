@@ -1,5 +1,8 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.16  Mon Apr 18 12:20:00 2016
+      - Documented newly added method ok_map_routes().
+
 0.15  Fri Apr 15 11:10:00 2016
       - Added new method ok_map_routes().
       - Added unit test for the newly added method.

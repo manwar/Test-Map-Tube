@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.16';
+$Test::Map::Tube::VERSION   = '0.17';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube (map data).
 
 =head1 VERSION
 
-Version 0.16
+Version 0.17
 
 =cut
 
@@ -37,8 +37,9 @@ that takes the role of L<Map::Tube>.You can also unit test map functions as well
     use strict; use warnings;
     use Test::More;
 
-    eval "use Test::Map::Tube";
-    plan skip_all => "Test::Map::Tube required" if $@;
+    my $min_ver = 0.17;
+    eval "use Test::Map::Tube $min_ver";
+    plan skip_all => "Test::Map::Tube $min_ver required" if $@;
 
     use Map::Tube::London;
     ok_map(Map::Tube::London->new);
@@ -48,7 +49,7 @@ that takes the role of L<Map::Tube>.You can also unit test map functions as well
     use strict; use warnings;
     use Test::More;
 
-    my $min_ver = 0.09;
+    my $min_ver = 0.17;
     eval "use Test::Map::Tube $min_ver";
     plan skip_all => "Test::Map::Tube $min_ver required" if $@;
 
@@ -60,7 +61,7 @@ that takes the role of L<Map::Tube>.You can also unit test map functions as well
     use strict; use warnings;
     use Test::More;
 
-    my $min_ver = 0.09;
+    my $min_ver = 0.17;
     eval "use Test::Map::Tube $min_ver tests => 2";
     plan skip_all => "Test::Map::Tube $min_ver required" if $@;
 
@@ -74,7 +75,7 @@ that takes the role of L<Map::Tube>.You can also unit test map functions as well
     use strict; use warnings;
     use Test::More;
 
-    my $min_ver = 0.15;
+    my $min_ver = 0.17;
     eval "use Test::Map::Tube $min_ver tests => 3";
     plan skip_all => "Test::Map::Tube $min_ver required" if $@;
 
@@ -285,7 +286,8 @@ sub _expected_route {
 
     my $nodes   = [];
     foreach my $name (split /\,/,$route) {
-        push @$nodes, $object->get_node_by_name($name);
+        my @_names = $object->get_node_by_name($name);
+        push @$nodes, $_names[0];
     }
 
     return Map::Tube::Route->new(

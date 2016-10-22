@@ -1,5 +1,8 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.21  Sat Oct 22 19:20:00 2016
+      - Upgraded to use Map::Tube v3.21.
+
 0.20  Thu Sep 08 13:50:00 2016
       - Updated test scripts (t/meta-json.t and t/meta-yml.t).
 

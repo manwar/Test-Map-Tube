@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.21';
+$Test::Map::Tube::VERSION   = '0.22';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube features.
 
 =head1 VERSION
 
-Version 0.21
+Version 0.22
 
 =cut
 
@@ -96,7 +96,7 @@ sub import {
     my ($self, %plan) = @_;
     my $caller = caller;
 
-    foreach my $function (qw(ok_map ok_map_routes ok_map_functions)) {
+    foreach my $function (qw(ok_map not_ok_map ok_map_routes ok_map_functions)) {
         no strict 'refs';
         *{$caller."::".$function} = \&$function;
     }
@@ -121,6 +121,19 @@ sub ok_map ($;$) {
 
     $TEST->plan(tests => 1) unless $PLAN;
     $TEST->is_num(_ok_map($object), $TEST_BOOL, $message);
+}
+
+=head2 not_ok_map($map_object, $message)
+
+Reverse of C<ok_map()>.
+
+=cut
+
+sub not_ok_map ($;$) {
+    my ($object, $message) = @_;
+
+    $TEST->plan(tests => 1) unless $PLAN;
+    $TEST->is_num(_ok_map($object), !$TEST_BOOL, $message);
 }
 
 =head2 ok_map_functions($map_object, $message)
@@ -180,7 +193,9 @@ sub _ok_map_functions {
 
     return 0 unless (defined $object && $object->does('Map::Tube'));
 
-    my $actual = $object->_xml_data;
+    my $actual;
+    eval { $actual = $object->_xml_data };
+    ($@) and (carp('no map data found') and return 0);
 
     # get_shortest_route()
     eval { $object->get_shortest_route };
@@ -266,6 +281,9 @@ sub _ok_map_routes {
     my ($object, $routes) = @_;
 
     return 0 unless (defined $object && $object->does('Map::Tube'));
+
+    eval { $object->_xml_data };
+    ($@) and (carp('no map data found') and return 0);
 
     foreach (@$routes) {
         chomp;

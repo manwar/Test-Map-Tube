@@ -1,5 +1,8 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.23  Wed Feb 08 14:10:00 2017
+      - Upgraded to use Map::Tube v3.22.
+
 0.22  Sat Feb 04 19:20:00 2017
       - Added method not_ok_map().
       - Added unit test for the new added method.

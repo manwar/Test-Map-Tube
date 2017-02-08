@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.22';
+$Test::Map::Tube::VERSION   = '0.23';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube features.
 
 =head1 VERSION
 
-Version 0.22
+Version 0.23
 
 =cut
 
@@ -182,6 +182,9 @@ sub _ok_map {
 
     return 0 unless (defined $object && $object->does('Map::Tube'));
 
+    eval { $object->get_map_data };
+    ($@) and (carp('no map data found') and return 0);
+
     eval { $object->_validate_map_data; };
     return 1 unless ($@);
 
@@ -194,7 +197,7 @@ sub _ok_map_functions {
     return 0 unless (defined $object && $object->does('Map::Tube'));
 
     my $actual;
-    eval { $actual = $object->_xml_data };
+    eval { $actual = $object->get_map_data };
     ($@) and (carp('no map data found') and return 0);
 
     # get_shortest_route()
@@ -282,7 +285,7 @@ sub _ok_map_routes {
 
     return 0 unless (defined $object && $object->does('Map::Tube'));
 
-    eval { $object->_xml_data };
+    eval { $object->get_map_data };
     ($@) and (carp('no map data found') and return 0);
 
     foreach (@$routes) {

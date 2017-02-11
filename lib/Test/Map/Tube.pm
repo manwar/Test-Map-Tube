@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.23';
+$Test::Map::Tube::VERSION   = '0.24';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,14 +9,13 @@ Test::Map::Tube - Interface to test Map::Tube features.
 
 =head1 VERSION
 
-Version 0.23
+Version 0.24
 
 =cut
 
 use strict; use warnings;
 use 5.006;
 use Carp;
-use XML::Twig;
 use Test::Builder;
 use Data::Compare;
 use Map::Tube::Route;
@@ -27,12 +26,12 @@ my $PLAN      = 0;
 
 =head1 DESCRIPTION
 
-It's main responsibilty is to  validate the map data (xml) as used by the package
-that takes the role of L<Map::Tube>.You can also unit test map functions as well.
+It's main responsibilty  is  to validate the map data as used by the package that
+takes the role of L<Map::Tube>.You can also unit test map functions as well.
 
 =head1 SYNOPSIS
 
-=head2 Validate map data (xml) ONLY.
+=head2 Validate map data ONLY.
 
     use strict; use warnings;
     use Test::More;
@@ -111,8 +110,8 @@ sub import {
 
 =head2 ok_map($map_object, $message)
 
-Validates the map data (xml).It expects an object of a package that has taken the
-role of L<Map::Tube>. You can optionally pass C<$message>.
+Validates the map data. It expects an object of a package that has taken the role
+of L<Map::Tube>. You can optionally pass C<$message>.
 
 =cut
 

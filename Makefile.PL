@@ -19,7 +19,6 @@ WriteMakefile(
         'Test::More' => 0,
     },
     PREREQ_PM => {
-        'XML::Twig'     => '3.48',
         'Map::Tube'     => '3.22',
         'Data::Compare' => '1.25',
         'Test::Builder' => '1.001014',
@@ -28,7 +27,7 @@ WriteMakefile(
     clean => { FILES => 'Test-Map-Tube-*' },
     (eval { ExtUtils::MakeMaker->VERSION(6.46) } ? (META_MERGE => {
         'meta-spec' => { version => 2 },
-        provides    => { 'Test::Map::Tube' => { file => 'lib/Test/Map/Tube.pm', version => '0.23' } },
+        provides    => { 'Test::Map::Tube' => { file => 'lib/Test/Map/Tube.pm', version => '0.24' } },
         resources   => {
             repository => {
                 type => 'git',

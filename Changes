@@ -1,5 +1,8 @@
 Revision history for Perl extension Test::Map::Tube.
 
+0.25  Mon Mar 13 10:55:00 2017
+      - Upgraded to use Map::Tube v3.28.
+
 0.24  Sat Feb 11 07:20:00 2017
       - Removed dependency on XML::Twig.
       - Updated pod document with regard to changes to Map::Tube v3.22.

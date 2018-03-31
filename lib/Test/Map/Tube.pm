@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.39';
+$Test::Map::Tube::VERSION   = '0.40';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube features.
 
 =head1 VERSION
 
-Version 0.39
+Version 0.40
 
 =cut
 
@@ -226,8 +226,6 @@ sub _ok_map_functions {
         or (carp('get_lines() returns incorrect line entries') and return 0);
 
     # get_stations()
-    eval { $object->get_stations };
-    ($@) and (carp('get_stations() with no param'.Dumper($@)) and return 0);
     eval { $object->get_stations('Not-A-Valid-Line-Name') };
     ($@) or (carp('get_stations() with invalid line name') and return 0);
     my $line_name = $actual->{lines}->{line}->[0]->{name};
@@ -273,8 +271,7 @@ sub _ok_map_functions {
     ($@) or (carp('get_node_by_name() with no param') and return 0);
     eval { $object->get_node_by_name('Not-A-Valid-Node-Name') };
     ($@) or (carp('get_node_by_name() with invalid node name') and return 0);
-    my $station_name = $actual->{stations}->{station}->[0]->{name};
-    eval { $object->get_node_by_name($station_name) };
+    eval { $object->get_node_by_name($from_station) };
     ($@) and (carp($@) and return 0);
 
     return 1;

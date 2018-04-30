@@ -217,8 +217,10 @@ sub _ok_map_functions {
     ($@) and carp($@) and return 0;
 
     # get_name()
-    ($object->name eq $actual->{name})
-        or (carp('name() returns incorrect map name') and return 0);
+    if (exists $actual->{name} && defined $actual->{name}) {
+        ($object->name eq $actual->{name})
+            or (carp('name() returns incorrect map name') and return 0);
+    }
 
     # get_lines()
     my $lines_count = scalar(@{$actual->{lines}->{line}});

@@ -1,6 +1,6 @@
 package Test::Map::Tube;
 
-$Test::Map::Tube::VERSION   = '0.58';
+$Test::Map::Tube::VERSION   = '0.59';
 $Test::Map::Tube::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ Test::Map::Tube - Interface to test Map::Tube features.
 
 =head1 VERSION
 
-Version 0.58
+Version 0.59
 
 =cut
 
@@ -329,11 +329,13 @@ sub _expected_route {
        });
 }
 
-=head1 BUGS
+=head1 CONTRIBUTORS
 
-None that I am aware of.Of course, if you find a bug, let me know, and I would do
-my best  to fix it.  This is still a very early version, so it is always possible
-that I have just "gotten it wrong" in some places.
+=over 2
+
+=item * Ed J
+
+=back
 
 =head1 SEE ALSO
 
@@ -345,7 +347,7 @@ that I have just "gotten it wrong" in some places.
 
 =head1 AUTHOR
 
-Mohammad S Anwar, C<< <mohammad.anwar at yahoo.com> >>
+Mohammad Sajid Anwar, C<< <mohammad.anwar at yahoo.com> >>
 
 =head1 REPOSITORY
 
@@ -353,9 +355,8 @@ L<https://github.com/manwar/Test-Map-Tube>
 
 =head1 BUGS
 
-Please report any bugs / feature requests to C<bug-test-map-tube at rt.cpan.org>,
-or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Map-Tube>.
-I will be notified, and then you'll automatically be notified of progress on your
+Please report any bugs or feature requests through the web interface at L<https://github.com/manwar/Test-Map-Tube/issues>.
+I will  be notified and then you'll automatically be notified of progress on your
 bug as I make changes.
 
 =head1 SUPPORT
@@ -368,9 +369,9 @@ You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker (report bugs here)
+=item * BUG Report
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Map-Tube>
+L<https://github.com/manwar/Test-Map-Tube/issues>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -380,15 +381,15 @@ L<http://annocpan.org/dist/Test-Map-Tube>
 
 L<http://cpanratings.perl.org/d/Test-Map-Tube>
 
-=item * Search CPAN
+=item * Search MetaCPAN
 
-L<http://search.cpan.org/dist/Test-Map-Tube/>
+L<https://metacpan.org/dist/Test-Map-Tube>
 
 =back
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (C) 2015 - 2019 Mohammad S Anwar.
+Copyright (C) 2015 - 2024 Mohammad Sajid Anwar.
 
 This  program  is  free software; you can redistribute it  and/or modify it under
 the  terms  of the the Artistic License (2.0). You may  obtain a copy of the full

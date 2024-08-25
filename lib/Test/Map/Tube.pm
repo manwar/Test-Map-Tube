@@ -167,9 +167,17 @@ v0.15 or above.
 
 sub ok_map_routes($$;$) {
     my ($object, $routes, $message) = @_;
-    $TEST->plan(tests => 1) unless $PLAN;
-    my ($response, $error) = _ok_map_routes($object, $routes);
-    $TEST->is_num($response, $TEST_BOOL, $message||$error);
+    my @errors = _ok_map_routes($object, $routes);
+    if (!@errors) {
+      $TEST->plan(tests => 1) unless $PLAN;
+      return $TEST->is_num($TEST_BOOL, $TEST_BOOL, $message);
+    }
+    $TEST->plan(tests => 0+@errors) unless $PLAN;
+    for (@errors) {
+      my ($g, $e, $d) = @$_;
+      my ($gs, $es) = map join("\n", @{$_->nodes}), $g, $e;
+      $TEST->is_eq($gs, $es, $message||$d)
+    }
 }
 
 #
@@ -291,6 +299,7 @@ sub _ok_map_routes {
     return 0 unless (defined $object && $object->does('Map::Tube'));
     eval { $object->get_map_data };
     ($@) and (carp('no map data found') and return 0);
+    my @failed;
     foreach (@$routes) {
         chomp;
         next if /^\#/;
@@ -298,9 +307,10 @@ sub _ok_map_routes {
         my ($description, $from, $to, $route) = split /\|/;
         my $got = $object->get_shortest_route($from, $to);
         my $expected = _expected_route($object, $route);
-        return (0, "Failed: $description") unless Compare($got, $expected);
+        next if Compare($got, $expected);
+        push @failed, [$got, $expected, $description];
     }
-    return 1;
+    return @failed;
 }
 
 sub _expected_route {

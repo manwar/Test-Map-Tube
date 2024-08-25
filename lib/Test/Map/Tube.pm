@@ -26,8 +26,8 @@ my $PLAN      = 0;
 
 =head1 DESCRIPTION
 
-It's main responsibilty  is  to validate the map data as used by the package that
-takes the role of L<Map::Tube>.You can also unit test map functions as well.
+Its main responsibilty is to validate the map data as used by the package that
+takes the role of L<Map::Tube>. You can also unit test map functions as well.
 
 =head1 SYNOPSIS
 
@@ -167,7 +167,6 @@ v0.15 or above.
 
 sub ok_map_routes($$;$) {
     my ($object, $routes, $message) = @_;
-
     $TEST->plan(tests => 1) unless $PLAN;
     my ($response, $error) = _ok_map_routes($object, $routes);
     $TEST->is_num($response, $TEST_BOOL, $message||$error);
@@ -289,23 +288,18 @@ sub _ok_map_functions {
 
 sub _ok_map_routes {
     my ($object, $routes) = @_;
-
     return 0 unless (defined $object && $object->does('Map::Tube'));
-
     eval { $object->get_map_data };
     ($@) and (carp('no map data found') and return 0);
-
     foreach (@$routes) {
         chomp;
         next if /^\#/;
         next if /^\s+$/;
-
         my ($description, $from, $to, $route) = split /\|/;
         my $got = $object->get_shortest_route($from, $to);
         my $expected = _expected_route($object, $route);
         return (0, "Failed: $description") unless Compare($got, $expected);
     }
-
     return 1;
 }
 
